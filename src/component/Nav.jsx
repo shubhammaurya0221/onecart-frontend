@@ -4,7 +4,7 @@ import { IoSearchOutline, IoBagHandleOutline, IoPersonOutline, IoLogOutOutline, 
 import { userDataContext } from '../context/UserContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { authDataContext } from '../context/authContext';
+import { authDataContext } from '../context/AuthContext';
 import { shopDataContext } from '../context/ShopContext';
 import { toast } from 'react-toastify';
 

@@ -10,7 +10,7 @@ import google from '../assets/google.png';
 import { IoEyeOutline, IoEye } from "react-icons/io5";
 
 // Context & Utils
-import { authDataContext } from '../context/authContext';
+import { authDataContext } from '../context/AuthContext';
 import { userDataContext } from '../context/UserContext';
 import { auth, provider } from '../../utils/Firebase';
 
