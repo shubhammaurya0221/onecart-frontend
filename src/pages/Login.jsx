@@ -45,7 +45,8 @@ function Login() {
         } catch (error) {
             console.log(error);
             setLoading(false);
-            toast.error("User Login Failed");
+            const msg = error.response?.data?.message || error.message || "User Login Failed";
+            toast.error(msg);
         }
     }
 
@@ -63,8 +64,9 @@ function Login() {
             navigate("/");
 
         } catch (error) {
-            console.log(error);
-            toast.error("Google Login Failed");
+            console.log("Google Login Error:", error);
+            const msg = error.response?.data?.message || error.message || "Google Login Failed";
+            toast.error(msg);
         }
     }
 
