@@ -4,6 +4,7 @@ import { RiRobot2Line } from 'react-icons/ri';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { shopDataContext } from '../context/ShopContext';
+import { authDataContext } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import aiLogo from '../assets/ai.png';
 import openSound from '../assets/open.mp3';
@@ -22,7 +23,8 @@ function AiChatbot() {
   const [isListening, setIsListening] = useState(false);
   const chatEndRef = useRef(null);
 
-  const { serverUrl, setShowSearch } = useContext(shopDataContext) || {};
+  const { serverUrl } = useContext(authDataContext) || {};
+  const { setShowSearch } = useContext(shopDataContext) || {};
   const navigate = useNavigate();
 
   const quickPrompts = [
@@ -72,7 +74,7 @@ function AiChatbot() {
       const res = await axios.post(`${baseUrl}/api/ai/chat`, {
         message: text.trim(),
         history: historyPayload
-      });
+      }, { withCredentials: true });
 
       const replyText = res.data?.reply || "I am here to help you navigate OneCart!";
       
@@ -267,7 +269,7 @@ function AiChatbot() {
           </div>
 
           {/* Quick Prompts Carousel / Bar */}
-          <div className="w-full px-3 py-2 bg-[#141414]/60 border-b border-[#96969620] flex items-center gap-1.5 overflow-x-auto no-scrollbar scrollbar-none">
+          <div className="w-full px-3 py-2 bg-[#141414]/60 border-b border-[#96969620] flex items-center gap-1.5 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {quickPrompts.map((prompt, idx) => (
               <button
                 key={idx}
@@ -280,7 +282,7 @@ function AiChatbot() {
           </div>
 
           {/* Chat Messages */}
-          <div className="flex-1 p-3.5 overflow-y-auto space-y-3 scrollbar-thin scrollbar-thumb-slate-700">
+          <div className="flex-1 p-3.5 overflow-y-auto space-y-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {messages.map((msg, idx) => (
               <div
                 key={idx}

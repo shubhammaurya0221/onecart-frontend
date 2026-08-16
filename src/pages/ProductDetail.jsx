@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { shopDataContext } from '../context/ShopContext'
+import { userDataContext } from '../context/UserContext'
 import { FaStar, FaStarHalfAlt, FaTruck, FaShieldAlt, FaSync } from "react-icons/fa"
 import RelatedProduct from '../component/RelatedProduct'
 import Loading from '../component/Loading'
@@ -8,6 +9,8 @@ import { toast } from 'react-toastify'
 
 function ProductDetail() {
   const { productId } = useParams()
+  const navigate = useNavigate()
+  const { userData } = useContext(userDataContext) || {}
   const { products, currency, addtoCart, loading } = useContext(shopDataContext) || {}
   const [productData, setProductData] = useState(null)
   const [selectedImage, setSelectedImage] = useState('')
@@ -25,6 +28,11 @@ function ProductDetail() {
   }, [productId, products])
 
   const handleAddToCart = () => {
+    if (!userData) {
+      toast.info("Please log in to add items to cart")
+      navigate("/login")
+      return
+    }
     if (!size) {
       toast.error("Please select a size first!")
       return

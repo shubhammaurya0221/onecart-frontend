@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { IoArrowForwardOutline, IoSparklesOutline } from 'react-icons/io5'
+import { IoArrowForwardOutline, IoArrowBackOutline, IoSparklesOutline } from 'react-icons/io5'
 
 function Hero({ heroData, heroCount, setHeroCount }) {
   const navigate = useNavigate()
@@ -15,7 +15,7 @@ function Hero({ heroData, heroCount, setHeroCount }) {
       </div>
 
       {/* Main Headline */}
-      <div className='flex flex-col gap-2 max-w-2xl'>
+      <div key={heroCount} className='flex flex-col gap-2 max-w-2xl animate-in fade-in slide-in-from-left-6 duration-700 ease-out'>
         <h1 className='text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight drop-shadow-md'>
           {heroData?.text1 || "Choose Your Perfect"}
         </h1>
@@ -38,20 +38,26 @@ function Hero({ heroData, heroCount, setHeroCount }) {
         </button>
       </div>
 
-      {/* Hero Slide Indicators */}
-      <div className='flex items-center gap-3 mt-12'>
-        {[0, 1, 2, 3].map((index) => (
-          <button
-            key={index}
-            onClick={() => setHeroCount(index)}
-            aria-label={`Go to slide ${index + 1}`}
-            className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-              heroCount === index
-                ? 'w-10 bg-gradient-to-r from-[#00d2fc] to-[#6060f5] shadow-[0_0_10px_rgba(0,210,252,0.5)]'
-                : 'w-2.5 bg-white/30 hover:bg-white/60'
-            }`}
-          />
-        ))}
+      {/* Hero Slide Controls & Indicators */}
+      <div className='flex items-center gap-6 mt-12 z-20'>
+        <div className='flex items-center gap-2'>
+          
+        </div>
+
+        <div className='flex items-center gap-3'>
+          {[0, 1, 2, 3].map((index) => (
+            <button
+              key={index}
+              onClick={() => setHeroCount(index)}
+              aria-label={`Go to slide ${index + 1}`}
+              className={`h-2.5 rounded-full transition-all duration-500 cursor-pointer ${
+                heroCount === index
+                  ? 'w-10 bg-gradient-to-r from-[#00d2fc] to-[#6060f5] shadow-[0_0_10px_rgba(0,210,252,0.5)]'
+                  : 'w-2.5 bg-white/30 hover:bg-white/60'
+              }`}
+            />
+          ))}
+        </div>
       </div>
 
     </div>

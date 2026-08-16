@@ -9,9 +9,9 @@ import { shopDataContext } from '../context/ShopContext';
 import { toast } from 'react-toastify';
 
 function Nav() {
-  const { userData } = useContext(userDataContext)
+  const { userData, setUserData } = useContext(userDataContext)
   const { serverUrl } = useContext(authDataContext)
-  const { setShowSearch, getCartCount } = useContext(shopDataContext) || {}
+  const { setShowSearch, getCartCount, setCartItem } = useContext(shopDataContext) || {}
   const [showProfile, setShowProfile] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
@@ -19,10 +19,15 @@ function Nav() {
   const handleLogout = async () => {
     try {
       await axios.get(serverUrl + "/api/auth/logout", { withCredentials: true })
+      setUserData(null)
+      if (setCartItem) setCartItem({})
+      setShowProfile(false)
       toast.success("Logged out successfully")
       navigate("/login")
     } catch (error) {
       console.log(error)
+      setUserData(null)
+      setShowProfile(false)
     }
   }
 
@@ -81,52 +86,61 @@ function Nav() {
           <IoSearchOutline className='w-5 h-5' />
         </button>
 
-        {/* Profile Avatar & Dropdown */}
-        <div className='relative'>
-          <button
-            onClick={() => setShowProfile(prev => !prev)}
-            className='w-10 h-10 rounded-xl bg-gradient-to-tr from-[#6060f5] to-[#00d2fc] p-[1.5px] cursor-pointer shadow-md hover:scale-105 transition-transform'
-          >
-            <div className='w-full h-full bg-[#0c2025] rounded-[10px] flex items-center justify-center font-bold text-sm text-[#00d2fc]'>
-              {userData?.name ? userData.name.slice(0, 1).toUpperCase() : <IoPersonOutline className='w-5 h-5 text-white' />}
-            </div>
-          </button>
-
-          {showProfile && (
-            <div className='absolute right-0 top-[125%] w-56 bg-[#0c2025]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200'>
-              <div className='px-3 py-2 border-b border-white/10 mb-1'>
-                <p className='text-xs font-semibold text-white truncate'>{userData?.name || 'User Profile'}</p>
-                <p className='text-[10px] text-gray-400 truncate'>{userData?.email}</p>
+        {/* Profile Avatar & Dropdown / Log In Button */}
+        {userData ? (
+          <div className='relative'>
+            <button
+              onClick={() => setShowProfile(prev => !prev)}
+              className='w-10 h-10 rounded-xl bg-gradient-to-tr from-[#6060f5] to-[#00d2fc] p-[1.5px] cursor-pointer shadow-md hover:scale-105 transition-transform'
+            >
+              <div className='w-full h-full bg-[#0c2025] rounded-[10px] flex items-center justify-center font-bold text-sm text-[#00d2fc]'>
+                {userData.name ? userData.name.slice(0, 1).toUpperCase() : <IoPersonOutline className='w-5 h-5 text-white' />}
               </div>
-              <ul className='flex flex-col text-xs font-medium space-y-0.5'>
-                <li>
-                  <button
-                    onClick={() => { navigate("/order"); setShowProfile(false); }}
-                    className='w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer'
-                  >
-                    <IoReceiptOutline className='w-4 h-4 text-[#00d2fc]' /> My Orders
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => { navigate("/about"); setShowProfile(false); }}
-                    className='w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer'
-                  >
-                    <IoPersonOutline className='w-4 h-4 text-[#6060f5]' /> About Us
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => { handleLogout(); setShowProfile(false); }}
-                    className='w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer mt-1 border-t border-white/5'
-                  >
-                    <IoLogOutOutline className='w-4 h-4' /> Log Out
-                  </button>
-                </li>
-              </ul>
-            </div>
-          )}
-        </div>
+            </button>
+
+            {showProfile && (
+              <div className='absolute right-0 top-[125%] w-56 bg-[#0c2025]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200'>
+                <div className='px-3 py-2 border-b border-white/10 mb-1'>
+                  <p className='text-xs font-semibold text-white truncate'>{userData.name || 'User Profile'}</p>
+                  <p className='text-[10px] text-gray-400 truncate'>{userData.email}</p>
+                </div>
+                <ul className='flex flex-col text-xs font-medium space-y-0.5'>
+                  <li>
+                    <button
+                      onClick={() => { navigate("/order"); setShowProfile(false); }}
+                      className='w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer'
+                    >
+                      <IoReceiptOutline className='w-4 h-4 text-[#00d2fc]' /> My Orders
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => { navigate("/about"); setShowProfile(false); }}
+                      className='w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer'
+                    >
+                      <IoPersonOutline className='w-4 h-4 text-[#6060f5]' /> About Us
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => { handleLogout(); setShowProfile(false); }}
+                      className='w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer mt-1 border-t border-white/5'
+                    >
+                      <IoLogOutOutline className='w-4 h-4' /> Log Out
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+        ) : (
+          <button
+            onClick={() => navigate("/login")}
+            className='px-4 py-2 rounded-xl bg-gradient-to-r from-[#00d2fc] to-[#6060f5] text-black font-bold text-xs shadow-md hover:scale-105 transition-all cursor-pointer'
+          >
+            Log In
+          </button>
+        )}
 
         {/* Cart Icon (Desktop) */}
         <button

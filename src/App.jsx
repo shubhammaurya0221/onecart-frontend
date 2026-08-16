@@ -24,7 +24,7 @@ let location = useLocation()
   return (
     <>
     <ToastContainer />
-    {userData && <Nav/>}
+    {location.pathname !== '/login' && location.pathname !== '/signup' && <Nav/>}
       <Routes>
 
         <Route path='/login' 
@@ -36,9 +36,8 @@ let location = useLocation()
         element={userData ? (<Navigate to={location.state?.from || "/"}/> ) 
         : (<Registration/>)}/>
 
-        <Route path='/' 
-        element={userData ? <Home/> : <Navigate to="/login" state={{from: location.pathname}} /> }/>
-      
+        <Route path='/' element={<Home/>}/>
+
         <Route path='/about' 
         element={userData ? <About/> : <Navigate to="/login" state={{from: location.pathname}} /> }/>
 
@@ -50,15 +49,17 @@ let location = useLocation()
 
         <Route path='/contact' 
         element={userData ? <Contact/> : <Navigate to="/login" state={{from: location.pathname}} /> }/>
+
         <Route path='/productdetail/:productId' 
         element={userData ? <ProductDetail/> : <Navigate to="/login" state={{from: location.pathname}} /> }/>
 
         <Route path='/cart' 
         element={userData ? <Cart/> : <Navigate to="/login" state={{from: location.pathname}} /> }/>
 
-          <Route path='/placeorder' 
+        <Route path='/placeorder' 
         element={userData ? <PlaceOrder/> : <Navigate to="/login" state={{from: location.pathname}} /> }/>
-         <Route path='/order' 
+
+        <Route path='/order' 
         element={userData ? <Order/> : <Navigate to="/login" state={{from: location.pathname}} /> }/>
 
         <Route path='*' element={<NotFound/>}/>

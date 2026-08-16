@@ -32,9 +32,6 @@ function Footer() {
             <a href="#twitter" className='p-2 bg-white/5 hover:bg-[#00d2fc]/20 hover:text-[#00d2fc] rounded-xl border border-white/5 transition-all'>
               <IoLogoTwitter className='w-4 h-4' />
             </a>
-            <a href="#github" className='p-2 bg-white/5 hover:bg-white/20 hover:text-white rounded-xl border border-white/5 transition-all'>
-              <IoLogoGithub className='w-4 h-4' />
-            </a>
           </div>
         </div>
 
